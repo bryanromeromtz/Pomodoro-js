@@ -22,6 +22,9 @@ form.addEventListener('submit', (event) => {
         createTask(task);
         // vaciar el input
         itTask.value = '';
+
+        // una vez que se crea la nueva tarea actualizamos el DOM o lo renderizamos
+        renderTask();
     }
 });
 
@@ -29,12 +32,28 @@ form.addEventListener('submit', (event) => {
 const createTask = (task) => {
     // creamos un objeto con la tarea y el estado inicial
     const newTask = {
-        id: uuid.v4(),
+        _id: uuid.v4(),
         title: task,
         completed: false,
     };
     // añadimos el objeto a nuestro array
     tasks.unshift(newTask);
     console.log(tasks);
+}
+
+const renderTask = () => {
+
+    const html = tasks.map((task) => {
+        return `
+            <div class="task">
+                <div class="completed">
+                    ${!task.completed ? `<button class="start-btn" data-id="${task._id}">Start</button>` : `<span class="done">Done</span>`}
+                </div>
+                <div class="title">${task.title}</div>
+            </div>
+        `;
+    }).join('');
+    console.log(html);
+    document.getElementById('tasks').innerHTML = html;
 }
 
