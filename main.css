@@ -1,0 +1,34 @@
+body {
+    background-color: #694f5d !important;
+}
+
+.time-wrapper {
+    background-color: #bfd3c1 !important;
+}
+
+#addTask {
+    background-color: #846c5b !important;
+    border: 1px solid #846c5b !important;
+    color: #ffe5d4 !important;
+}
+
+.start-btn {
+    background-color: #68a691 !important;
+    border: 1px solid #68a !important;
+    color: #ffe5d4 !important;
+}
+
+.title {
+    color: #443742 !important;
+}
+
+#taskName {
+    text-transform: uppercase !important;
+    text-align: center;
+    color: #443742;
+}
+
+#time {
+    color: #ff6d00 !important;
+    text-align: center;
+}

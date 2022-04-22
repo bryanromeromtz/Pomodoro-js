@@ -9,6 +9,8 @@ let current = null;
 const addTask = document.getElementById('addTask');
 const itTask = document.getElementById('itTask');
 const form = document.getElementById('form');
+const taskName = document.querySelector('#time #taskName');
+
 
 
 // eventos del DOM
@@ -25,6 +27,12 @@ form.addEventListener('submit', (event) => {
 
         // una vez que se crea la nueva tarea actualizamos el DOM o lo renderizamos
         renderTask();
+    } else {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'fill the field!'
+        })
     }
 });
 
@@ -47,10 +55,10 @@ const renderTask = () => {
     const html = tasks.map((task) => {
         return `
             <div class="task">
-                <div class="completed">
-                    ${!task.completed ? `<button class="start-btn" data-id="${task._id}">Start</button>` : `<span class="done">Done</span>`}
+                <div class="completed row">
+                    ${!task.completed ? `<button class="start-btn btn fw-bold" data-id="${task._id}">Start</button>` : `<span class="done">Done</span>`}
                 </div>
-                <div class="title">${task.title}</div>
+                <div class="title fs-5 mt-3 mb-3">${task.title}</div>
             </div>
         `;
         // con join podemos unir todos los elementos del array en un string
@@ -95,8 +103,6 @@ const startBtnHandler = (id) => {
     current = id;
     // taskIndex encuentra el index de la tarea y retorna el indice
     const taskIndex = tasks.findIndex((task) => task._id === id);
-    // se guarda el elemento del dom
-    const taskName = document.querySelector('#time #taskName');
     // se inyecta el titulo de la tarea en el dom
     taskName.textContent = tasks[taskIndex].title;
 
@@ -112,6 +118,20 @@ const timeHandler = (id) => {
     // comienza a contar el timer y lo decrementa cada segundo
     time--;
     renderTime();
+
+    // si el timer llega a 0 se detiene
+    if (time === 0) {
+        // se detiene el timer
+        clearInterval(timer);
+        // se limpia el timer
+        timer = null;
+        // se limpia el current
+        current = null;
+        // se limpia el taskName
+        taskName.textContent = '';
+        // se llama a la funcion break
+        renderTime();
+    }
 }
 
 
@@ -123,8 +143,12 @@ const renderTime = () => {
     // const seconds = parseInt(time - minutes * 60);
     const seconds = parseInt(time % 60);
     // console.log(minutes, seconds);
-    timeDiv.textContent = `Minutes: ${minutes}, seconds: ${seconds}`;
+    timeDiv.textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
     console.log(timeDiv);
 }
+
+
+
+
 
 
