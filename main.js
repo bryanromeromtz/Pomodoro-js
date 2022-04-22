@@ -56,7 +56,10 @@ const renderTask = () => {
         return `
             <div class="task">
                 <div class="completed row">
-                    ${!task.completed ? `<button class="start-btn btn fw-bold" data-id="${task._id}">Start</button>` : `<span class="done">Done</span>`}
+                    ${!task.completed ? `<button class="start-btn btn fw-bold" data-id="${task._id}">Start</button>` : `<span class="done fs-5">Done <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+                  </svg></span>`}
                 </div>
                 <div class="title fs-5 mt-3 mb-3">${task.title}</div>
             </div>
@@ -98,14 +101,14 @@ const renderTask = () => {
 
 // esta funcion crea un timer y lo ejecuta
 const startBtnHandler = (id) => {
-    time = 25 * 60;
+    time = 30 * 60;
     // se le asigna el id a current
     current = id;
     // taskIndex encuentra el index de la tarea y retorna el indice
     const taskIndex = tasks.findIndex((task) => task._id === id);
     // se inyecta el titulo de la tarea en el dom
     taskName.textContent = tasks[taskIndex].title;
-
+    renderTime();
     // creamos el timer
     timer = setInterval(() => {
         timeHandler(id);
@@ -123,14 +126,11 @@ const timeHandler = (id) => {
     if (time === 0) {
         // se detiene el timer
         clearInterval(timer);
-        // se limpia el timer
+        markCompleted(id);
         timer = null;
-        // se limpia el current
-        current = null;
-        // se limpia el taskName
-        taskName.textContent = '';
-        // se llama a la funcion break
-        renderTime();
+        // se vuelve a crear el cicle de 25 minutos
+        renderTask();
+        startBreak();
     }
 }
 
@@ -148,7 +148,44 @@ const renderTime = () => {
 }
 
 
+// esta funcion marca como finalizada la tarea
+const markCompleted = (id) => {
+    // buscamos la tarea que corresponde al id del boton
+    const task = tasks.find((task) => task._id === id);
+    // cambiamos el estado de la tarea
+    task.completed = !task.completed;
+    console.log(task);
+}
 
 
 
 
+const startBreak = () => {
+    time = 5 * 60;
+
+    taskName.textContent = 'Break';
+    // creamos el timer
+    renderTime();
+    timerBreak = setInterval(() => {
+        timeHandlerBreak();
+    }, 1000);
+}
+
+
+const timeHandlerBreak = () => {
+
+    time--;
+    renderTime();
+
+    if (time === 0) {
+        clearInterval(timerBreak);
+        current = null;
+        taskName.textContent = '';
+        timerBreak = null;
+        // se vuelve a crear el cicle de 25 minutos
+        renderTask();
+    }
+}
+
+renderTime();
+renderTask();
