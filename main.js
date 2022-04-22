@@ -80,40 +80,51 @@ const renderTask = () => {
                 // buscamos la tarea que corresponde al id del boton
                 let id = btn.getAttribute('data-id');
                 // llaamamos a la función  y le pasamos el id de la tarea
-                // startBtnHandler(id);
+                startBtnHandler(id);
                 console.log(id);
                 btn.textContent = 'In Progress...';
             }
-
         });
     });
 }
 
-// const startBtnHandler = (id) => {
-//     time = 25 * 60;
-//     current = id;
-//     timer = setInterval(() => {
-//         time--;
-//         // console.log(time);
-//         // console.log(timeToString(time));
-//         document.getElementById('timer').textContent = timeToString(time);
-//         if (time === 0) {
-//             clearInterval(timer);
-//             timer = null;
-//             document.getElementById('timer').textContent = 'Break';
-//             timerBreak = setInterval(() => {
-//                 time--;
-//                 // console.log(time);
-//                 // console.log(timeToString(time));
-//                 document.getElementById('timer').textContent = timeToString(time);
-//                 if (time === 0) {
-//                     clearInterval(timerBreak);
-//                     timerBreak = null;
-//                     document.getElementById('timer').textContent = '25:00';
-//                     startBtnHandler(current);
-//                 }
-//             }, 1000);
-//         }
-//     }, 1000);
-// }
+// esta funcion crea un timer y lo ejecuta
+const startBtnHandler = (id) => {
+    time = 25 * 60;
+    // se le asigna el id a current
+    current = id;
+    // taskIndex encuentra el index de la tarea y retorna el indice
+    const taskIndex = tasks.findIndex((task) => task._id === id);
+    // se guarda el elemento del dom
+    const taskName = document.querySelector('#time #taskName');
+    // se inyecta el titulo de la tarea en el dom
+    taskName.textContent = tasks[taskIndex].title;
+
+    // creamos el timer
+    timer = setInterval(() => {
+        timeHandler(id);
+    }, 1000);
+}
+
+
+// esta funcion comienza el timer 
+const timeHandler = (id) => {
+    // comienza a contar el timer y lo decrementa cada segundo
+    time--;
+    renderTime();
+}
+
+
+// esta funcion renderiza el tiempo le da formato a un numero
+const renderTime = () => {
+    const timeDiv = document.querySelector('#time #value');
+    // se divide el numero por la cantidad de segundos que tiene un minuto
+    const minutes = parseInt(time / 60);
+    // const seconds = parseInt(time - minutes * 60);
+    const seconds = parseInt(time % 60);
+    // console.log(minutes, seconds);
+    timeDiv.textContent = `Minutes: ${minutes}, seconds: ${seconds}`;
+    console.log(timeDiv);
+}
+
 
